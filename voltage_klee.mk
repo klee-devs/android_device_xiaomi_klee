@@ -9,7 +9,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit some common Lineage stuff.
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+$(call inherit-product, vendor/voltage/config/common_full_phone.mk)
 
 # Inherit from klee device
 $(call inherit-product, device/xiaomi/klee/device.mk)
@@ -19,7 +19,8 @@ PRODUCT_CHECK_PREBUILT_MAX_PAGE_SIZE := false
 
 # Device manufacturer
 PRODUCT_DEVICE := klee
-PRODUCT_NAME := lineage_klee
+PRODUCT_NAME := voltage_klee
+VOLTAGE_BUILD_TYPE := UNOFFICIAL
 PRODUCT_BRAND := POCO
 PRODUCT_MODEL := 2511FPC34G
 PRODUCT_MANUFACTURER := xiaomi

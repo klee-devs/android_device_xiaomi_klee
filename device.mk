@@ -6,6 +6,9 @@
 
 DEVICE_PATH := device/xiaomi/klee
 
+# Use the Klee-specific USB gadget init rc.
+$(call soong_config_set_bool,mediatek_gadget,use_custom_usb_gadget_rc,true)
+
 # Enforce generic ramdisk allow list
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 
@@ -14,11 +17,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/launch_with_ven
 
 # Project ID Quota
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
-
-# Sign keys
-ifneq ($(PRODUCT_NAME),halcyon_klee)
--include vendor/private/keys/keys.mk
-endif
 
 # Rootdir
 PRODUCT_PACKAGES += \
@@ -57,9 +55,8 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/google/pixel/pixelstats \
     hardware/google/pixel/power-libperfmgr \
     hardware/google/interfaces \
-    hardware/lineage/interfaces/power-libperfmgr \
+    hardware/voltage/interfaces/power-libperfmgr \
     hardware/mediatek \
-    hardware/mediatek/libaedv \
     hardware/mediatek/libmtkperf_client \
     hardware/mediatek/wlan/wifi_hal \
     hardware/xiaomi
@@ -315,6 +312,12 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/com.nxp.mifare.xml
 
 # Overlays
+DEVICE_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay \
+    $(LOCAL_PATH)/overlay-voltage
+
+PRODUCT_ENFORCE_RRO_TARGETS += *
+
 $(call inherit-product, hardware/mediatek/overlay/mssi.mk)
 PRODUCT_PACKAGES += \
     CarrierConfigOverlayKlee \
