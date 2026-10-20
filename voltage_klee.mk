@@ -42,3 +42,6 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     DeviceProduct=$(PRODUCT_SYSTEM_NAME) \
     SystemDevice=$(PRODUCT_SYSTEM_DEVICE) \
     SystemName=$(PRODUCT_SYSTEM_NAME)
+
+# Device-local build-only package override provider removes optional inherited apps.
+PRODUCT_PACKAGES += KleeDebloatOverrides
