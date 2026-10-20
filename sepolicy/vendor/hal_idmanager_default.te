@@ -9,6 +9,7 @@ hal_client_domain(hal_idmanager_default, hal_keymint)
 hal_client_domain(hal_idmanager_default, hal_secure_element)
 hal_client_domain(hal_idmanager_default, hal_idmanager)
 hal_server_domain(hal_idmanager_default, hal_idmanager)
+hal_client_domain(hal_idmanager_default, hal_misyscore)
 
 allow hal_idmanager_default tee_device:chr_file rw_file_perms;
 allow hal_idmanager_default ion_device:chr_file r_file_perms;
