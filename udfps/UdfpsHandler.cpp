@@ -178,6 +178,11 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
 
     void onFingerUp() { setFingerDown(false); }
 
+    void cancel() override {
+        LOG(DEBUG) << __func__ << " resetting UDFPS illumination";
+        setFingerDown(false, LHBM_TARGET_BRIGHTNESS_OFF_AUTH_STOP);
+    }
+
     void onAcquired(int32_t result, int32_t vendorCode) {
         LOG(DEBUG) << __func__ << " result: " << result << " vendorCode: " << vendorCode;
         switch (static_cast<AcquiredInfo>(result)) {
@@ -227,12 +232,14 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
         ioctl(touch_fd_.get(), TOUCH_IOC_COMMON_DATA, &data);
         set(FOD_STATUS_PATH, value);
     }
-    void setFingerDown(bool pressed) {
-        mDevice->extCmd(mDevice, COMMAND_FOD_PRESS_STATUS, pressed ? PARAM_FOD_PRESSED : PARAM_FOD_RELEASED);
+    void setFingerDown(
+            bool pressed, uint32_t offValue = LHBM_TARGET_BRIGHTNESS_OFF_FINGER_UP) {
+        mDevice->extCmd(mDevice, COMMAND_FOD_PRESS_STATUS,
+                        pressed ? PARAM_FOD_PRESSED : PARAM_FOD_RELEASED);
         disp_local_hbm_req req;
         req.base.flag = 0;
         req.base.disp_id = MI_DISP_PRIMARY;
-        req.local_hbm_value = pressed ? LHBM_TARGET_BRIGHTNESS_WHITE_1000NIT : LHBM_TARGET_BRIGHTNESS_OFF_FINGER_UP;
+        req.local_hbm_value = pressed ? LHBM_TARGET_BRIGHTNESS_WHITE_1000NIT : offValue;
         ioctl(disp_fd_.get(), MI_DISP_IOCTL_SET_LOCAL_HBM, &req);
     }
 };
