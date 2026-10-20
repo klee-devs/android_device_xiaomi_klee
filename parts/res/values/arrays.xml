@@ -125,6 +125,7 @@
         <item>@string/color_cyan</item>
         <item>@string/color_blue</item>
         <item>@string/color_purple</item>
+        <item>@string/color_white</item>
         <item>@string/color_gradient</item>
     </string-array>
 
@@ -136,6 +137,7 @@
         <item>00ffff</item>
         <item>0000ff</item>
         <item>800080</item>
+        <item>ffffff</item>
         <item>gradient</item>
     </string-array>
 

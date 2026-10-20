@@ -329,7 +329,7 @@ class LightService : Service() {
         }
     }
 
-    private val availableColors = arrayOf("ff0000", "ff7f00", "ffff00", "00ff00", "00ffff", "0000ff", "800080")
+    private val availableColors = arrayOf("ff0000", "ff7f00", "ffff00", "00ff00", "00ffff", "0000ff", "800080", "ffffff")
     private var lastColorChangeTime = 0L
 
     private fun startVisualizer() {

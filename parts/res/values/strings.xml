@@ -180,5 +180,6 @@
     <string name="color_cyan">Cyan</string>
     <string name="color_blue">Blue</string>
     <string name="color_purple">Purple</string>
+    <string name="color_white">White</string>
     <string name="color_gradient">Gradient</string>
 </resources>

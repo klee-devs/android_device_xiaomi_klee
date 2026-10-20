@@ -48,7 +48,7 @@ object LedManager {
         }
     }
 
-    private val dynamicColors = arrayOf("ff0000", "ff7f00", "ffff00", "00ff00", "00ffff", "0000ff", "800080", "ff00ff")
+    private val dynamicColors = arrayOf("ff0000", "ff7f00", "ffff00", "00ff00", "00ffff", "0000ff", "800080", "ff00ff", "ffffff")
 
     private fun setDeviceColor(colorHex: String) {
         writeLine(RGBCOLOR_NODE, "0x04 0x$colorHex")
