@@ -6,6 +6,10 @@
 
 DEVICE_PATH := device/xiaomi/klee
 
+# MediaTek SoC identification
+PRODUCT_PACKAGES += \
+    chipinfo
+
 # Use the Klee-specific USB gadget init rc.
 $(call soong_config_set_bool,mediatek_gadget,use_custom_usb_gadget_rc,true)
 
