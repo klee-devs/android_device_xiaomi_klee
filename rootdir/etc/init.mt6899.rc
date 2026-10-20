@@ -904,9 +904,6 @@ on post-fs-data
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360_ldo.5-0064/reg_addr
     chmod 0664 sys/kernel/debug/rt-regmap/mt6360-4e/reg_addr
 
-    #Create dir for dolby
-    mkdir /data/vendor/dolby 0770 media media
-
     #blocktag driver node
     chown system system /proc/blocktag/eara_io_boost
 
