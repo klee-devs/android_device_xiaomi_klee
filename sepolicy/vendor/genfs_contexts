@@ -23,6 +23,7 @@ genfscon sysfs /devices/platform/soc/11e10000.dp-tx/extcon/dp_audio/cable.0/name
 
 # Fingerprint
 genfscon sysfs /devices/virtual/touch/touch_dev/fod_press_status u:object_r:vendor_fingerprint_sysfs:s0
+genfscon sysfs /devices/virtual/touch/touch_dev/fod_longpress_gesture_enabled u:object_r:vendor_fingerprint_sysfs:s0
 
 # Light
 
