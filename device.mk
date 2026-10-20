@@ -387,6 +387,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.sensors-service.xiaomi-multihal \
     sensors.dynamic_sensor_hal \
+    sensors.xiaomi.klee.udfps \
     sensors.xiaomi.v2
 
 PRODUCT_COPY_FILES += \

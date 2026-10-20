@@ -142,7 +142,6 @@ ro.vendor.gps.chrdev=gps_drv_dl_v051
 persist.vendor.sys.fp.expolevel=0x88
 persist.vendor.fingerprint.type=udfps_optical
 persist.vendor.fingerprint.sensor_location=638|2516|105
-ro.vendor.sensors.xiaomi.udfps=true
 
 # Graphics
 debug.graphics.game_default_frame_rate.disabled=true
@@ -384,7 +383,8 @@ telephony.active_modems.max_count=2
 
 # Sensor
 ro.vendor.mtk.sensor.support=yes
-ro.vendor.sensors.xiaomi.udfps=true
+# Klee uses the ioctl-backed UDFPS sub-HAL instead of the missing generic sysfs control.
+ro.vendor.sensors.xiaomi.udfps=false
 
 # Surface Flinger
 debug.sf.disable_client_composition_cache=0
