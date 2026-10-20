@@ -247,15 +247,6 @@ blob_fixups: blob_fixups_user_type = {
         .replace_needed('libaudio_aidl_conversion_common_ndk.so', 'libaudio_aidl_conversion_common_ndk_prebuilt.so'),
     'vendor/lib64/libaudio_aidl_conversion_common_ndk_prebuilt.so': blob_fixup()
         .replace_needed('android.media.audio.common.types-V5-ndk.so', 'android.media.audio.common.types-V3-ndk.so'),
-    (
-         'vendor/lib64/soundfx/libswdapaidl.so',
-         'vendor/lib64/soundfx/libswgamedapaidl.so',
-         'vendor/lib64/soundfx/libswspatializeraidl.so'
-    ): blob_fixup()
-        .replace_needed('android.media.audio.common.types-V5-ndk.so', 'android.media.audio.common.types-V3-ndk.so')
-        .replace_needed('libaudio_aidl_conversion_common_ndk.so', 'libaudio_aidl_conversion_common_ndk_prebuilt.so'),
-    'vendor/lib64/soundfx/libdlbvolaidl.so': blob_fixup()
-        .replace_needed('android.media.audio.common.types-V5-ndk.so', 'android.media.audio.common.types-V3-ndk.so'),
     'system_ext/bin/hw/android.hardware.audio.parameter_parser.service': blob_fixup()
         .replace_needed('av-audio-types-aidl-ndk.so', 'av-audio-types-aidl-V3-ndk.so'),
     (

@@ -21,7 +21,6 @@ ro.config.vc_call_vol_default=6
 ro.config.vc_call_vol_steps=7
 ro.miui.build.region=GL
 ro.vendor.audio.camera_gain=true
-ro.vendor.audio.dolby.dax.support=true
 ro.vendor.audio.gain.support=true
 ro.vendor.audio.media.volume.steps=30
 ro.vendor.audio.meeting.mode=true
