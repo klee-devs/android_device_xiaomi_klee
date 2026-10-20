@@ -142,22 +142,21 @@ class ColorService : Service() {
         val mode: Int,
         val value: Int,
         val cookie: Int,
-        val isExpert: Boolean = false,
     ) {
         VIVID(258, 0, 2, 255),
         SATURATED(256, 1, 2, 255),
         STANDARD(257, 2, 2, 255),
-        ORIGINAL(269, 26, 1, 0, true),
-        P3(268, 26, 2, 0, true),
-        SRGB(267, 26, 3, 0, true),
+        ORIGINAL(269, 26, 1, 0),
+        P3(268, 26, 2, 0),
+        SRGB(267, 26, 3, 0),
         ;
 
         fun setCurrent() {
             if (DEBUG) Log.d(TAG, "set current mode $this")
-            DisplayFeatureWrapper.setFeature(mode, value, cookie)
-            if (isExpert) {
-                DisplayFeatureWrapper.setFeature(EXPERT_MODE, EXPERT_VALUE, EXPERT_COOKIE)
-            }
+            DisplayFeatureWrapper.setFeatures(
+                DisplayFeatureWrapper.Feature(EXPERT_MODE, EXPERT_VALUE, EXPERT_COOKIE),
+                DisplayFeatureWrapper.Feature(mode, value, cookie),
+            )
         }
 
         companion object {

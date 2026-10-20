@@ -5,6 +5,8 @@
 
 package com.xiaomi.settings.display
 
+import android.os.Handler
+import android.os.HandlerThread
 import android.os.IBinder
 import android.os.ServiceManager
 import android.util.Log
@@ -13,6 +15,10 @@ import vendor.xiaomi.hardware.displayfeature_aidl.IDisplayFeature
 object DisplayFeatureWrapper {
     private const val TAG = "DisplayFeatureWrapper"
     private val DEBUG = Log.isLoggable(TAG, Log.DEBUG)
+    private val handlerThread = HandlerThread("DisplayFeature").apply { start() }
+    private val handler = Handler(handlerThread.looper)
+
+    data class Feature(val mode: Int, val value: Int, val cookie: Int)
 
     @Volatile private var displayFeature: IDisplayFeature? = null
 
@@ -48,18 +54,31 @@ object DisplayFeatureWrapper {
         value: Int,
         cookie: Int,
     ) {
-        Thread {
-            val feature = getDisplayFeature()
-            if (feature == null) {
-                if (DEBUG) Log.d(TAG, "DisplayFeature is null, skipping setFeature")
-                return@Thread
+        setFeatures(Feature(mode, value, cookie))
+    }
+
+    fun setFeatures(vararg features: Feature) {
+        handler.post {
+            val service = getDisplayFeature()
+            if (service == null) {
+                if (DEBUG) Log.d(TAG, "DisplayFeature is null, skipping setFeatures")
+                return@post
             }
+
             try {
-                if (DEBUG) Log.d(TAG, "setFeature: mode=$mode value=$value cookie=$cookie")
-                feature.setFeature(0, mode, value, cookie) // displayId 0
+                features.forEach { feature ->
+                    if (DEBUG) {
+                        Log.d(
+                            TAG,
+                            "setFeature: mode=" + feature.mode + " value=" + feature.value
+                                + " cookie=" + feature.cookie,
+                        )
+                    }
+                    service.setFeature(0, feature.mode, feature.value, feature.cookie)
+                }
             } catch (e: Exception) {
-                Log.e(TAG, "setFeature failed!", e)
+                Log.e(TAG, "setFeatures failed!", e)
             }
-        }.start()
+        }
     }
 }

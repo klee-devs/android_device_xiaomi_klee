@@ -10,9 +10,11 @@
 #include <android-base/logging.h>
 #include <android-base/unique_fd.h>
 
+#include <atomic>
+#include <chrono>
+#include <fstream>
 #include <poll.h>
 #include <sys/ioctl.h>
-#include <fstream>
 #include <thread>
 
 #include "UdfpsHandler.h"
@@ -172,15 +174,19 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
     }
 
     void onFingerDown(uint32_t /*x*/, uint32_t /*y*/, float /*minor*/, float /*major*/) {
-        if (mAuthSuccess) return;
+        if (mAuthSuccess.load()) return;
         setFingerDown(true);
     }
 
-    void onFingerUp() { setFingerDown(false); }
+    void onFingerUp() override {
+        setFingerDown(false);
+        setFodStatus(FOD_STATUS_OFF);
+    }
 
     void cancel() override {
         LOG(DEBUG) << __func__ << " resetting UDFPS illumination";
         setFingerDown(false, LHBM_TARGET_BRIGHTNESS_OFF_AUTH_STOP);
+        setFodStatus(FOD_STATUS_OFF);
     }
 
     void onAcquired(int32_t result, int32_t vendorCode) {
@@ -207,11 +213,11 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
     }
 
     void onAuthenticationSucceeded() {
-        mAuthSuccess = true;
+        mAuthSuccess.store(true);
         onFingerUp();
         std::thread([this]() {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            mAuthSuccess = false;
+            mAuthSuccess.store(false);
         }).detach();
     }
 
@@ -221,7 +227,7 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
     fingerprint_device_t* mDevice;
     android::base::unique_fd disp_fd_;
     android::base::unique_fd touch_fd_;
-    bool mAuthSuccess = false;
+    std::atomic<bool> mAuthSuccess{false};
 
     void setFodStatus(int value) {
         ioctl(touch_fd_.get(), TOUCH_IOC_SELECT_TOUCH_ID, MI_DISP_PRIMARY);
