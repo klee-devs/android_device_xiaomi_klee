@@ -921,6 +921,13 @@
         <boolean name="vonr_enabled_bool" value="true" />
         <boolean name="vonr_setting_visibility_bool" value="true" />
         <boolean name="vonr_on_by_default_bool" value="true" />
+        <int name="parameters_use_for_5g_nr_signal_bar_int" value="1" />
+        <int-array name="5g_nr_ssrsrp_thresholds_int_array" num="4">
+            <item value="-120" />
+            <item value="-105" />
+            <item value="-95" />
+            <item value="-85" />
+        </int-array>
     </carrier_config>
     <carrier_config cid="2022">
         <int name="carrier_default_wfc_ims_mode_int" value="1" />
