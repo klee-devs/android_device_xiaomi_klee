@@ -11,7 +11,9 @@
 #include <android-base/unique_fd.h>
 
 #include <atomic>
+#include <bitset>
 #include <chrono>
+#include <cstdint>
 #include <fstream>
 #include <poll.h>
 #include <sys/ioctl.h>
@@ -167,6 +169,14 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
 
                 bool localHbmUiReady = value & LOCAL_HBM_UI_READY;
 
+                // Ignore late panel-ready notifications after authentication. A late
+                // NIT_FOD command can turn the FOD glow back on after it was cleared.
+                if (localHbmUiReady && mAuthCompleted.load()) {
+                    LOG(DEBUG) << "LOCAL_HBM_UI_READY ignored - auth already completed";
+                    mDevice->extCmd(mDevice, COMMAND_NIT, PARAM_NIT_NONE);
+                    continue;
+                }
+
                 mDevice->extCmd(mDevice, COMMAND_NIT,
                                 localHbmUiReady ? PARAM_NIT_FOD : PARAM_NIT_NONE);
             }
@@ -174,7 +184,8 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
     }
 
     void onFingerDown(uint32_t /*x*/, uint32_t /*y*/, float /*minor*/, float /*major*/) {
-        if (mAuthSuccess.load()) return;
+        mAuthCompleted.store(false);
+        mAuthGeneration.fetch_add(1);
         setFingerDown(true);
     }
 
@@ -185,6 +196,8 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
 
     void cancel() override {
         LOG(DEBUG) << __func__ << " resetting UDFPS illumination";
+        mAuthCompleted.store(false);
+        mAuthGeneration.fetch_add(1);
         setFingerDown(false, LHBM_TARGET_BRIGHTNESS_OFF_AUTH_STOP);
         setFodStatus(FOD_STATUS_OFF);
     }
@@ -213,21 +226,31 @@ class XiaomiKleeUdfpsHandler : public UdfpsHandler {
     }
 
     void onAuthenticationSucceeded() {
-        mAuthSuccess.store(true);
-        onFingerUp();
-        std::thread([this]() {
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            mAuthSuccess.store(false);
+        mAuthCompleted.store(true);
+        const uint32_t authGeneration = mAuthGeneration.fetch_add(1) + 1;
+
+        // The panel can still be waking when authentication completes. Delay LHBM
+        // off until the panel is ready, otherwise the driver may drop the command.
+        std::thread([this, authGeneration]() {
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            if (mAuthGeneration.load() == authGeneration && mAuthCompleted.load()) {
+                onFingerUp();
+            }
         }).detach();
     }
 
-    void onAuthenticationFailed() { onFingerUp(); }
+    void onAuthenticationFailed() {
+        mAuthCompleted.store(false);
+        mAuthGeneration.fetch_add(1);
+        onFingerUp();
+    }
 
   private:
     fingerprint_device_t* mDevice;
     android::base::unique_fd disp_fd_;
     android::base::unique_fd touch_fd_;
-    std::atomic<bool> mAuthSuccess{false};
+    std::atomic<bool> mAuthCompleted{false};
+    std::atomic<uint32_t> mAuthGeneration{0};
 
     void setFodStatus(int value) {
         ioctl(touch_fd_.get(), TOUCH_IOC_SELECT_TOUCH_ID, MI_DISP_PRIMARY);

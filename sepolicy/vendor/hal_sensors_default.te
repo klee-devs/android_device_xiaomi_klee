@@ -16,6 +16,7 @@ allow hal_sensors_default vendor_displayfeature_sysfs:lnk_file r_file_perms;
 
 
 get_prop(hal_sensors_default, vendor_sensors_prop)
+get_prop(hal_sensors_default, vendor_fingerprint_prop)
 
 # Allow Sensors hal to find hal_audio_hwservice
 hal_client_domain(hal_sensors_default, hal_audio)

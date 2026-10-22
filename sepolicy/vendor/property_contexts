@@ -30,6 +30,7 @@ vendor.display.panel.calibration.status        u:object_r:vendor_displayfeature_
 vendor.displayfeature.entry.enable             u:object_r:vendor_displayfeature_prop:s0
 
 # Fingerprint
+persist.vendor.fingerprint.sensor_location u:object_r:vendor_fingerprint_prop:s0 exact string
 persist.vendor.fpc. u:object_r:vendor_fingerprint_prop:s0
 persist.vendor.goodix. u:object_r:vendor_fingerprint_prop:s0
 persist.vendor.sys.fp. u:object_r:vendor_fingerprint_prop:s0
