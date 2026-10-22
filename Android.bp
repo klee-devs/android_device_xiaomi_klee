@@ -10,6 +10,13 @@ soong_namespace {
     ],
 }
 
+cc_library_shared {
+    name: "libcppcose_rkp_legacy_compat",
+    vendor: true,
+    srcs: ["cppcose_rkp_legacy_compat.cpp"],
+    shared_libs: ["libcppcose_rkp"],
+}
+
 install_symlink {
     name: "vendor_mdota_symlink",
     vendor: true,

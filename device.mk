@@ -271,6 +271,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libkeymaster4support.vendor \
     libkeymint_support.vendor \
+    libcppcose_rkp_legacy_compat \
     libkeymint_remote_prov_support.vendor
 
 PRODUCT_COPY_FILES += \
