@@ -10,10 +10,21 @@ soong_namespace {
     ],
 }
 
+// The MiTEE blobs require the Android 16 cppcose and fmt v10 ABIs. The
+// keymint remote-provisioning blob already loads this shim for cppcose, so
+// export fmt v10 here as well; Android 17 libbase only provides fmt v12.
 cc_library_shared {
     name: "libcppcose_rkp_legacy_compat",
     vendor: true,
-    srcs: ["cppcose_rkp_legacy_compat.cpp"],
+    srcs: [
+        "cppcose_rkp_legacy_compat.cpp",
+        "fmt-v10/src/format.cc",
+    ],
+    local_include_dirs: ["fmt-v10/include"],
+    cflags: [
+        "-DFMT_LIB_EXPORT",
+        "-fno-exceptions",
+    ],
     shared_libs: ["libcppbor", "libcppcose_rkp", "libcrypto"],
 }
 
