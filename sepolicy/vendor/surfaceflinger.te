@@ -1,0 +1,2 @@
+# SurfaceFlinger uses Mali ICompression for gralloc buffer metadata.
+hal_client_domain(surfaceflinger, hal_mtk_mali_platform_default)
