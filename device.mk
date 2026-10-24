@@ -6,6 +6,10 @@
 
 DEVICE_PATH := device/xiaomi/klee
 
+# Keep the MediaTek mapper's unsupported-metadata log isolated from other SurfaceFlinger messages.
+PRODUCT_SYSTEM_PROPERTIES += \
+    log.tag.mtk_wfd_page-uncached=FATAL
+
 # MediaTek SoC identification
 PRODUCT_PACKAGES += \
     chipinfo
