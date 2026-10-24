@@ -16,6 +16,8 @@ soong_namespace {
 cc_library_shared {
     name: "libcppcose_rkp_legacy_compat",
     vendor: true,
+    // fmt 10.2.1 hits a Clang C++20 FMT_STRING consteval error.
+    cpp_std: "gnu++17",
     srcs: [
         "cppcose_rkp_legacy_compat.cpp",
         "fmt-v10/src/format.cc",
