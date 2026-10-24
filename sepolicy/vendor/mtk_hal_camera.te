@@ -1,5 +1,6 @@
 binder_call(system_app, mtk_hal_camera)
 get_prop(mtk_hal_camera, camera_config_prop)
+get_prop(mtk_hal_camera, vendor_miui_region_prop)
 get_prop(mtk_hal_camera, bpf_progs_loaded_prop)
 
 r_dir_file(mtk_hal_camera, camera_persist_file)

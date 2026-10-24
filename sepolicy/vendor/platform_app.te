@@ -8,6 +8,7 @@ r_dir_file(platform_app, vendor_camera_data_file)
 allow platform_app privapp_data_file:file execute;
 
 get_prop(platform_app, vendor_display_type_prop)
+get_prop(platform_app, vendor_miui_region_prop)
 get_prop(platform_app, vendor_us_proximity_prop)
 
 # Fingerprint
